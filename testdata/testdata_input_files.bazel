@@ -1,0 +1,5 @@
+exports_files([
+    "large.index",
+    "medium.index",
+    "small.index",
+])

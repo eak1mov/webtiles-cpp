@@ -1,0 +1,111 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "export_index",
+    srcs = ["export_index.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "//webtiles:tileindex",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:initialize",
+    ],
+)
+
+cc_binary(
+    name = "export_mbtiles",
+    srcs = ["export_mbtiles.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "@abseil-cpp//absl/cleanup",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:flags",
+        "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/log:log",
+        "@sqlite3",
+    ],
+)
+
+cc_binary(
+    name = "export_xyz",
+    srcs = ["export_xyz.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:flags",
+        "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/log:log",
+        "@fmt",
+    ],
+)
+
+cc_binary(
+    name = "import_index",
+    srcs = ["import_index.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "//webtiles:index_format",
+        "//webtiles:tileindex",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:flags",
+        "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/log:log",
+        "@webtiles//webtiles/fbs:cc_fbs",
+    ],
+)
+
+cc_binary(
+    name = "import_mbtiles",
+    srcs = ["import_mbtiles.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "//webtiles:index_format",
+        "@abseil-cpp//absl/cleanup",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:flags",
+        "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/log:log",
+        "@sqlite3",
+        "@webtiles//webtiles/fbs:cc_fbs",
+    ],
+)
+
+cc_binary(
+    name = "import_xyz",
+    srcs = ["import_xyz.cpp"],
+    copts = ["-std=c++20"],
+    linkstatic = 1,
+    deps = [
+        "//webtiles",
+        "//webtiles:index_format",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/flags:parse",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:flags",
+        "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/log:log",
+        "@abseil-cpp//absl/strings",
+        "@fmt",
+        "@re2",
+        "@webtiles//webtiles/fbs:cc_fbs",
+    ],
+)

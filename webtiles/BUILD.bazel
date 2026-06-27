@@ -1,0 +1,123 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+cc_library(
+    name = "webtiles",
+    srcs = [
+        "internal/asserts.h",
+        "internal/iterators.h",
+        "reader.cpp",
+        "writer.cpp",
+    ],
+    hdrs = [
+        "common.h",
+        "reader.h",
+        "writer.h",
+    ],
+    copts = ["-std=c++20"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":digest_internal",
+        ":index",
+        "@abseil-cpp//absl/container:flat_hash_map",
+        "@webtiles//webtiles/fbs:cc_fbs",
+    ],
+)
+
+cc_library(
+    name = "index",
+    srcs = [
+        "index/common.cpp",
+        "index/common.h",
+        "index/format_plain.cpp",
+        "index/format_sparse.cpp",
+        "index/format_sparse_block.cpp",
+        "index/format_sparse_block.h",
+        "index/index.cpp",
+        "internal/asserts.h",
+    ],
+    hdrs = [
+        "common.h",
+        "index/format_plain.h",
+        "index/format_sparse.h",
+        "index/index.h",
+        "index/index_map.h",
+    ],
+    copts = ["-std=c++20"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":digest_internal",
+        "@abseil-cpp//absl/container:flat_hash_map",
+        "@abseil-cpp//absl/container:flat_hash_set",
+        "@abseil-cpp//absl/hash",
+        "@webtiles//webtiles/fbs:cc_fbs",
+    ],
+)
+
+cc_library(
+    name = "digest_internal",
+    srcs = ["internal/digest.cpp"],
+    hdrs = ["internal/digest.h"],
+    copts = ["-std=c++20"],
+    deps = ["@xxhash"],
+)
+
+cc_test(
+    name = "tests",
+    size = "medium",
+    srcs = [
+        "index/index_test.cpp",
+        "reader_test.cpp",
+        "writer_test.cpp",
+    ],
+    copts = ["-std=c++20"],
+    data = ["//testdata"],
+    linkstatic = 1,
+    deps = [
+        ":test_utils",
+        ":tileindex",
+        ":webtiles",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "benchmark",
+    srcs = ["benchmark.cpp"],
+    copts = ["-std=c++20"],
+    data = ["//testdata"],
+    linkstatic = 1,
+    deps = [
+        ":test_utils",
+        ":tileindex",
+        ":webtiles",
+        "@google_benchmark//:benchmark_main",
+    ],
+)
+
+cc_library(
+    name = "test_utils",
+    hdrs = ["internal/test_utils.h"],
+    copts = ["-std=c++20"],
+    deps = [":webtiles"],
+)
+
+cc_library(
+    name = "index_format",
+    hdrs = ["internal/index_format.h"],
+    copts = ["-std=c++20"],
+    visibility = [
+        "//converter:__pkg__",
+        "//testdata:__pkg__",
+    ],
+    deps = [":webtiles"],
+)
+
+cc_library(
+    name = "tileindex",
+    hdrs = ["internal/tileindex.h"],
+    copts = ["-std=c++20"],
+    visibility = [
+        "//converter:__pkg__",
+        "//testdata:__pkg__",
+    ],
+)
